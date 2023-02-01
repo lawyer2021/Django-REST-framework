@@ -1,29 +1,24 @@
-from rest_framework.viewsets import ModelViewSet, ViewSet
-from rest_framework import viewsets, generics
-from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer
-from .models import Users
-from mainapp.models import Todo, Project
-from .serializers import UserModelSerializer, TodoModelSerializer, ProjectModelSerializer
-from rest_framework.serializers import ModelSerializer
-import django_filters.rest_framework
-from  rest_framework.response import Response
-# from rest_framework.views import APIView
-from django_filters import rest_framework as filters
-from rest_framework.generics import ListAPIView
-from mainapp.filters import ProjectFilter, ToDoFilter
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
 from .filters import UserFilter
+from .models import Users
+from .serializers import UserModelSerializer
 
 
-class UserModelViewSet(ModelViewSet):
+class UserModelViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
     queryset = Users.objects.all()
     serializer_class = UserModelSerializer
-    filterset_fields = ('id', 'username', 'firstname', 'lastname', 'email')
-    # filterset_class = UserFilter
+    filterset_class = UserFilter
+
+# class UserModelViewSet(ModelViewSet):
+#     queryset = Users.objects.all()
+#     serializer_class = UserModelSerializer
+#     # filterset_fields = ('id', 'username', 'firstname', 'lastname', 'email')
+#     filterset_class = UserFilter
 
 # Работает:
-    # def get_queryset(self):
-    #     return Users.objects.filter(firstname__contains="Анатолий")
+# def get_queryset(self):
+#     return Users.objects.filter(firstname__contains="Анатолий")
 
 # Работает:
 #     def get_queryset(self):
@@ -41,7 +36,6 @@ class UserModelViewSet(ModelViewSet):
 #     filterset_fields = ('username', 'firstname', 'lastname',)
 
 
-
 # class ProjectModelViewSet(ModelViewSet):
 #     queryset = Project.objects.all()
 #     serializer_class = ProjectModelSerializer
@@ -54,17 +48,20 @@ class UserModelViewSet(ModelViewSet):
 #     filterset_class = ToDoFilter
 
 
-
-
-
-# class myAPIView(ViewSet):
+# class MyAPIView(ViewSet):
 #     def list(self, request):
 #         users = Users.objects.all()
 #         serializer = UserModelSerializer(users, many=True)
 #         return Response(serializer.data)
+#
+#     def retrieve(self, request):
+#         users = Users.objects.all()
+#         serializer = UserModelSerializer(users, many=True)
+#         return Response(serializer.data)
 
-# class UserDjangoFilterViewSet(viewsets.ModelViewSet):
+
+# class UserModelViewSet(viewsets.ModelViewSet):
 #     queryset = Users.objects.all()
 #     serializer_class = UserModelSerializer
-#     filterset_fields = ['username', 'firstname']
-
+#     # filterset_fields = ['username', 'firstname']
+#     filterset_class = UserFilter

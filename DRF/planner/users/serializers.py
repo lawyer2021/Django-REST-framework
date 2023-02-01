@@ -1,22 +1,16 @@
-from rest_framework.serializers import ModelSerializer
-from django_filters import rest_framework as filters
+from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework import serializers
 from .models import Users
 from mainapp.models import Project, Todo
 
 
-class UserModelSerializer(ModelSerializer):
+class UserModelSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Users
         fields = '__all__'
 
 
-class UserFilter(filters.FilterSet):
-    class Meta:
-        model = Users
-        fields = '__all__'
-
-
-class TodoModelSerializer(ModelSerializer):
+class TodoModelSerializer(HyperlinkedModelSerializer):
     user = UserModelSerializer()
 
     class Meta:
@@ -24,7 +18,7 @@ class TodoModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class ProjectModelSerializer(ModelSerializer):
+class ProjectModelSerializer(HyperlinkedModelSerializer):
     user = UserModelSerializer(many=True)
 
     class Meta:
