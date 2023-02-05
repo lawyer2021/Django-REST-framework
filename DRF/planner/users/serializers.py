@@ -8,6 +8,7 @@ class UserModelSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Users
         fields = '__all__'
+        # fields = ('firstname', 'lastname')
 
 
 class TodoModelSerializer(HyperlinkedModelSerializer):
