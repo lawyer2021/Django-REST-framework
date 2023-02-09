@@ -142,10 +142,10 @@ class App extends React.Component {
         axios.get('http://127.0.0.1:8000/api/project'),
         axios.get('http://127.0.0.1:8000/api/todo'),
         ]).then(([users, project, todo]) => {
-            const user_from_api = users.data
-            const project_from_api = project.data
-            const todo_from_api = todo.data
-            console.log(user_from_api, project_from_api, todo_from_api)
+            const user_from_api = users.data.results
+            const project_from_api = project.data.results
+            const todo_from_api = todo.data.results
+            // console.log(user_from_api, project_from_api, todo_from_api)
             this.setState(
                 {
                     'users': user_from_api,

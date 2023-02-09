@@ -1,4 +1,5 @@
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 from .models import Project, Todo
 from users.serializers import TodoModelSerializer, ProjectModelSerializer
@@ -11,6 +12,7 @@ class ProjectPaginator(LimitOffsetPagination):
 
 
 class ProjectModelViewSet(ModelViewSet):
+    # permission_classes = [AllowAny]
     queryset = Project.objects.all()
     serializer_class = ProjectModelSerializer
     filterset_class = ProjectFilter

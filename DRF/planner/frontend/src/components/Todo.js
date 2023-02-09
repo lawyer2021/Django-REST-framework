@@ -11,22 +11,26 @@ const TodoItem = ({item}) => {
             <td>{item.project_id}</td>
             <td>{item.user_id}</td>
         </tr>
-    )
-}
+    );
+};
 const TodoList = ({items}) => {
     return (
         <table>
-            <tr>
-                <th>ID</th>
-                <th>TEXT</th>
-                <th>DATE CREATED</th>
-                <th>DATE UPDATED</th>
-                <th>ACTIVE</th>
-                <th>PROJECT ID</th>
-                <th>USER ID</th>
-            </tr>
-            {items.map((item) => <TodoItem item={item}/>)}
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>TEXT</th>
+                    <th>DATE CREATED</th>
+                    <th>DATE UPDATED</th>
+                    <th>ACTIVE</th>
+                    <th>PROJECT ID</th>
+                    <th>USER ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {items.map((item) => <TodoItem item={item}/>)}
+            </tbody>
         </table>
-    )
+    );
 }
-export default TodoList
+export default TodoList;
