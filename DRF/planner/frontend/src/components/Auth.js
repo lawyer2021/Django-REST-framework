@@ -2,7 +2,7 @@ import React from 'react'
 
 class LoginForm extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {login: '', password: ''}
     }
 
@@ -11,7 +11,7 @@ class LoginForm extends React.Component {
             {
                 [event.target.name]: event.target.value
             }
-        )
+        );
     }
 
     handleSubmit(event) {
@@ -29,7 +29,7 @@ class LoginForm extends React.Component {
                        onChange={(event) => this.handleChange(event)}/>
                 <input type="submit" value="login"/>
             </form>
-        )
+        );
     }
 }
 export default LoginForm

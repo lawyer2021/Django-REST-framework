@@ -149,7 +149,8 @@ class App extends React.Component {
     }
 
     is_authenticated() {
-        return this.state.token !== ''
+        console.log("AUTH OK AUTH OK AUTH OK AUTH OK AUTH OK")
+        return this.state.token != ''
     }
 
     logout() {
@@ -158,8 +159,8 @@ class App extends React.Component {
 
     get_token_from_storage() {
         const cookies = new Cookies()
-        // const token = cookies.get('token')
-        const token = localStorage.getItem('token')
+        const token = cookies.get('token')
+        // const token = localStorage.getItem('token')
         // 1 Вариант
         // this.setState({'token': token})
         this.setState({'token': token}, () => this.load_data())
@@ -175,15 +176,16 @@ class App extends React.Component {
         let headers = {
             'Content-Type': 'application/json',
         }
-        if (this.is_authenticated())
-        {
-            headers['Authorization'] = 'Token' + this.state.token
-        }
-        return headers
+    if (this.is_authenticated())
+    {
+        headers['Authorization'] = 'Token ' + this.state.token
+    }
+    return headers
     }
 
     load_data() {
         const headers = this.get_headers()
+        console.log(headers)
         // Promise.all([
         //     axios.get('http://127.0.0.1:8000/api/users', {headers}),
         //     axios.get('http://127.0.0.1:8000/api/projects', {headers}),
@@ -202,15 +204,14 @@ class App extends React.Component {
         //     )
         // }).catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:8000/api/users', {headers})
-            .then(response => {
-                const users = response.data
-                    this.setState(
-                        {
-                            'users': users['results']
-                    }
+        axios.get('http://127.0.0.1:8000/api/users', {headers}).then(response => {
+            const users = response.data
+            this.setState(
+                {
+                    'users': users['results']
+                }
                 )
-            }).catch(error => console.log(error))
+        }).catch(error => console.log(error))
 
         axios.get('http://127.0.0.1:8000/api/projects', {headers})
             .then(response => {
