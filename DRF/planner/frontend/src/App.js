@@ -13,6 +13,8 @@ import project from "./components/Project.js";
 import todo from "./components/Todo.js";
 import {Header} from "./components/layout/Header";
 import {Footer} from "./components/layout/Footer";
+import LoginForm from "./components/Auth";
+import Cookies from "universal-cookie/es6";
 
 const NotFound404 = ({ location }) => {
     return (
@@ -124,9 +126,8 @@ const NotFound404 = ({ location }) => {
 
 
 
-// Вариант № 3: НЕ РАБОТАЕТ (ЗАПРОС С СЕРВЕРА ПО API ДАННЫХ ИЗ ВСЕХ ТАБЛИЦ - USERS, PROJECTS, TODO):
-// При этом запрос проходит нормально и в лог выводятся объекты со всеми свойствами из базы данных, но на локалхосте
-// рендерятся только заголовки из фалов user.js, project.js, todo.js.
+// Вариант № 3: РАБОТАЕТ ЗАПРОС С СЕРВЕРА ПО API ДАННЫХ ИЗ ВСЕХ ТАБЛИЦ - USERS, PROJECTS, TODO:
+
 class App extends React.Component {
     constructor(props) {
         super(props)
@@ -134,26 +135,108 @@ class App extends React.Component {
             'users': [],
             'projects': [],
             'todo': [],
+            'token': ''
         }
     }
-   componentDidMount() {
-        Promise.all([
-        axios.get('http://127.0.0.1:8000/api/users'),
-        axios.get('http://127.0.0.1:8000/api/project'),
-        axios.get('http://127.0.0.1:8000/api/todo'),
-        ]).then(([users, project, todo]) => {
-            const user_from_api = users.data.results
-            const project_from_api = project.data.results
-            const todo_from_api = todo.data.results
-            // console.log(user_from_api, project_from_api, todo_from_api)
-            this.setState(
-                {
-                    'users': user_from_api,
-                    'project': project_from_api,
-                    'todo': todo_from_api
-                }
-            )
-        }).catch(error => console.log(error))
+
+    set_token(token) {
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        // localStorage.setItem('token', token)
+        // 1 Вариант
+        // this.setState(({'token': token}))
+        this.setState({'token': token}, () => this.load_data())
+    }
+
+    is_authenticated() {
+        return this.state.token !== ''
+    }
+
+    logout() {
+        this.set_token('')
+    }
+
+    get_token_from_storage() {
+        const cookies = new Cookies()
+        // const token = cookies.get('token')
+        const token = localStorage.getItem('token')
+        // 1 Вариант
+        // this.setState({'token': token})
+        this.setState({'token': token}, () => this.load_data())
+    }
+
+    get_token(login, password) {
+        axios.post('http://127.0.0.1:8000/api-token-auth/', {username: login, password: password}).then(response => {
+            this.set_token(response.data['token'])
+        }).catch(error => alert('Неверный пароль'))
+    }
+
+    get_headers() {
+        let headers = {
+            'Content-Type': 'application/json',
+        }
+        if (this.is_authenticated())
+        {
+            headers['Authorization'] = 'Token' + this.state.token
+        }
+        return headers
+    }
+
+    load_data() {
+        const headers = this.get_headers()
+        // Promise.all([
+        //     axios.get('http://127.0.0.1:8000/api/users', {headers}),
+        //     axios.get('http://127.0.0.1:8000/api/projects', {headers}),
+        //     axios.get('http://127.0.0.1:8000/api/todo', {headers}),
+        // ]).then(([users, projects, todo]) => {
+        //     const user_from_api = users.data.results
+        //     const project_from_api = projects.data.results
+        //     const todo_from_api = todo.data.results
+        //     // console.log(user_from_api, project_from_api, todo_from_api)
+        //     this.setState(
+        //         {
+        //             'users': user_from_api,
+        //             'projects': project_from_api,
+        //             'todo': todo_from_api
+        //        }
+        //     )
+        // }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/api/users', {headers})
+            .then(response => {
+                const users = response.data
+                    this.setState(
+                        {
+                            'users': users['results']
+                    }
+                )
+            }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/api/projects', {headers})
+            .then(response => {
+                const projects = response.data
+                    this.setState(
+                        {
+                            'projects': projects['results']
+                    }
+                )
+            }).catch(error => console.log(error))
+
+
+        axios.get('http://127.0.0.1:8000/api/todo', {headers})
+            .then(response => {
+                const todo = response.data
+                    this.setState(
+                        {
+                            'todo': todo['results']
+                    }
+                )
+            }).catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+       // this.get_token()
+       this.get_token_from_storage()
     }
 
     // РОУТИНГ РАБОТАЕТ КОРРЕКТНО ПРИ ИСПОЛЬЗОВАНИИ ВАРИАНТОВ 1 И 2:
@@ -174,6 +257,9 @@ class App extends React.Component {
                             <li>
                                 <Link to='/todo'>Notes</Link>
                             </li>
+                            <li>
+                                {this.is_authenticated() ? <button onClick={() => this.logout()}>Logout</button> : <Link to='/login'>Login</Link>}
+                            </li>
                         </ul>
                     </nav>
                     <Switch>
@@ -181,6 +267,7 @@ class App extends React.Component {
                         <Route exact path='/projects' component={() => <ProjectList items={this.state.projects}/>} />
                         <Route exact path='/todo' component={() => <TodoList items={this.state.todo}/>} />
                         <Route exact path='/user/:id' component={() => <UserProjectList items={this.state.projects}/>} />
+                        <Route exact path='/login' component={() => <LoginForm get_token={(login, password) => this.get_token(login, password)}/>}/>
                         <Redirect from='/users' to='/'/>
                         <Route component={NotFound404}/>
                     </Switch>

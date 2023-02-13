@@ -25,7 +25,7 @@ from mainapp.views import ProjectModelViewSet, TodoModelViewSet
 
 router = DefaultRouter()
 router.register('users', UserModelViewSet)
-router.register('project', ProjectModelViewSet)
+router.register('projects', ProjectModelViewSet)
 router.register('todo', TodoModelViewSet)
 # router.register('my', MyAPIView, basename='my')
 
