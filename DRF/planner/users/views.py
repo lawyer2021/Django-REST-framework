@@ -1,21 +1,29 @@
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from .filters import UserFilter
 from .models import Users
 from .serializers import UserModelSerializer
 
 
-class UserModelViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
+class UserModelViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
     queryset = Users.objects.all()
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAuthenticated]
     serializer_class = UserModelSerializer
-    filterset_class = UserFilter
+    # filterset_class = UserFilter
+
+
+# class UserModelViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
+#     queryset = Users.objects.all()
+    # permission_classes = [IsAuthenticated]
+    # serializer_class = UserModelSerializer
+    # filterset_class = UserFilter
+
 
 # class UserModelViewSet(ModelViewSet):
 #     queryset = Users.objects.all()
 #     serializer_class = UserModelSerializer
-#     # filterset_fields = ('id', 'username', 'firstname', 'lastname', 'email')
+    # filterset_fields = ('id', 'username', 'firstname', 'lastname', 'email')
 #     filterset_class = UserFilter
 
 # Работает:

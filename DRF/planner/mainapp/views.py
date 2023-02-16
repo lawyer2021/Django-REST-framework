@@ -12,7 +12,7 @@ class ProjectPaginator(LimitOffsetPagination):
 
 
 class ProjectModelViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectModelSerializer
     filterset_class = ProjectFilter

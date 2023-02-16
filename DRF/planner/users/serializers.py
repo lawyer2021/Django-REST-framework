@@ -20,7 +20,7 @@ class TodoModelSerializer(ModelSerializer):
 
 
 class ProjectModelSerializer(ModelSerializer):
-    user = UserModelSerializer(many=True)
+    # user = UserModelSerializer(many=True)
 
     class Meta:
         model = Project
