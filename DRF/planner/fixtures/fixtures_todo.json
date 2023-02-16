@@ -1,0 +1,24 @@
+[
+{
+  "model": "mainapp.todo",
+  "fields": {
+    "project": 1,
+    "text": "1. Prepare a statement of claim",
+    "user": "9edc0992-5b80-4305-9a8f-5ddc03dc5968",
+    "date_created": "2013-01-16T08:16:59.844Z",
+    "date_updated": "2013-01-16T08:16:59.844Z",
+    "is_active": true
+  }
+},
+{
+  "model": "mainapp.todo",
+  "fields": {
+    "project": 2,
+    "text": "1. Attend the court session 2. Send notifications to the parties of the process",
+    "user": "e0b32cef-908f-444b-a163-9d1446ad027b",
+    "date_created": "2013-01-16T08:16:59.844Z",
+    "date_updated": "2013-01-16T08:16:59.844Z",
+    "is_active": true
+  }
+}
+]
