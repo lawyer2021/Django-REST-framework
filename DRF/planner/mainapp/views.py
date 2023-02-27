@@ -5,6 +5,7 @@ from .models import Project, Todo
 from users.serializers import TodoModelSerializer, ProjectModelSerializer
 from .filters import ProjectFilter, ToDoFilter
 from rest_framework.response import Response
+from rest_framework import filters
 
 
 class ProjectPaginator(LimitOffsetPagination):
@@ -17,6 +18,8 @@ class ProjectModelViewSet(ModelViewSet):
     serializer_class = ProjectModelSerializer
     filterset_class = ProjectFilter
     pagination_class = ProjectPaginator
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['name']
 
 
 class TodoPaginator(LimitOffsetPagination):

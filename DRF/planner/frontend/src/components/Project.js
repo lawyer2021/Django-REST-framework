@@ -1,8 +1,8 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link} from "react-router-dom";
 
 const ProjectItem = ({item, deleteProject}) => {
-    console.log(item)
+    // console.log(item)
     return (
         <tr>
             <td>{item.id}</td>
@@ -15,8 +15,9 @@ const ProjectItem = ({item, deleteProject}) => {
     );
 }
 const ProjectList = ({items, deleteProject}) => {
-    console.log({items})
+    // console.log({items})
     return (
+        <div>
         <table>
             <thead>
                 <tr>
@@ -30,6 +31,8 @@ const ProjectList = ({items, deleteProject}) => {
                 {items.map((item) => <ProjectItem item={item} deleteProject={deleteProject}/> )}
             </tbody>
         </table>
+        <Link to='/projects/create'>Create</Link>
+        </div>
     )
 }
 export default ProjectList
